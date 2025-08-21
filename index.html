@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Grammar Thingy</title>
+</head>
+
+<body>
+
+  <div style="text-align: center; margin: 10%;">
+    <h1>Shit Enhancer</h1>
+    <p>A tool that uses LLM to enhance your shit</p>
+  </div>
+  <div class="container">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Write your shit here" id="before" style="height: 200px"></textarea>
+            <label for="before">Write your shit here</label>
+          </div>
+          <div class="container text-center mt-3">
+            <div class="row">
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option selected value="0">🔎 Correct Grammar</option>
+                    <option value="1">💬 Enhance Phrasing</option>
+                    <option value="2">🧠 Smart, Academic Tone</option>
+                    <option value="3">🏴‍☠️ Pirate Speak</option>
+                  </select>
+                  <label for="floatingSelect">Mode</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating">
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option selected value="0">Gemma 3 (Recommended)</option>
+                    <option value="1">Qwen 3</option>
+                    <option value="2">GPT 4o mini</option>
+                    <option value="3">Gemini 2.5 Flash</option>
+                  </select>
+                  <label for="floatingSelect">LLM Model</label>
+                </div>
+              </div>
+              <div class="col">
+                <div style="margin: 5px;">
+                  <input type="checkbox" class="btn-check" id="think" autocomplete="off" disabled>
+                  <label class="btn btn-outline-info btn-lg" for="think">🧠 Think</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col">
+                <div class="d-grid gap-2">
+                  <button class="btn btn-info btn-lg" type="button">Enahnce Shit ✨</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Your enhanced shit will show here" id="after" style="height: 200px"></textarea>
+            <label for="after">Your enhanced shit will show here</label>
+          </div>
+
+          <div class="container text-center mt-3">
+            <div class="row">
+              <div class="col">
+                Copy?
+              </div>
+              <div class="col">
+                Mabey retry?
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+</body>
+
+</html>
