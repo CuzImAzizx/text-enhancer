@@ -18,7 +18,7 @@
     <div class="container text-center">
       <div class="row">
         <div class="col">
-          
+
           <div class="form-floating">
             <textarea class="form-control" placeholder="Write your shit here" id="before" style="height: 200px" maxlength="512"></textarea>
             <label for="before">Write your shit here</label>
@@ -47,12 +47,14 @@
                   <label for="model">LLM Model</label>
                 </div>
               </div>
+              <!--
               <div class="col">
                 <div style="margin: 5px;">
                   <input type="checkbox" class="btn-check" id="think" autocomplete="off" disabled>
                   <label class="btn btn-outline-info btn-lg" for="think">🧠 Think</label>
                 </div>
               </div>
+              -->
             </div>
             <div class="row mt-3">
               <div class="col">
@@ -64,10 +66,25 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-floating">
-            <textarea readonly class="form-control" placeholder="Your enhanced shit will show here" id="after" style="height: 200px"></textarea>
+          <div class="form-floating" id="textArea" style="display: block;">
+            <p class="form-control mb-3" id="after" style="height: 200px; text-align: left;">
+            </p>
             <label for="after">Your enhanced shit will show here</label>
           </div>
+
+          <div class="form-floating" id="loadingText" style="display: none;">
+            <p class="form-control mb-3" id="after" style="height: 200px; text-align: left;">
+
+                <span class="placeholder col-7"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-6"></span>
+                <span class="placeholder col-8"></span>
+                <span class="placeholder col-7"></span>
+            </p>
+            <label for="after">Your enhanced shit will show here</label>
+          </div>
+
 
           <div class="container text-center mt-3">
             <div class="row">
