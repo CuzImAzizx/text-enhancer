@@ -19,10 +19,13 @@ app.get("/", (req, res) => {
 // ==== API Routes ====
 const systemPrompts = [
     "Correct the grammatical errors in the following text without any additional explanations or comments. Focus on accuracy and clarity, and maintain the original writing style as much as possible.",
+    "Improve the phrasing of the following text for clarity and elegance without any additional explanations or comments, while preserving its meaning. Make it sound natural and polished.",
+    "Transform the input into formal academic English without any additional explanations or comments. Use clear structure, precise vocabulary, and neutral tone.",
+    "Rewrite the text in pirate language without any additional explanations or comments. Use nautical slang, pirate jargon, and playful tone."
 ]
 const models = [
     "gemma3:latest",
-    "qwen3:4b",
+    //"qwen3:4b",
 ]
 
 app.post("/api/enhanceText", async (req, res) => {
@@ -45,7 +48,7 @@ app.post("/api/enhanceText", async (req, res) => {
 
 
 
-    const prompt = `${systemPrompts[mode]}\n${text}`
+    const prompt = `${systemPrompts[mode]}\n<USERINPUT>\n${text}\n</USERINPUT>`
 
     const ollamaResponse = await fetch("http://127.0.0.1:11434/api/generate", {
         method: "POST",
