@@ -14,7 +14,7 @@
 
   <div class="container">
 
-    <div class="container mt-3" style="width: 60%;">
+    <div class="container mt-3" style="width: 60vw;">
       <div class="card">
         <div class="card-body">
           <h2>1- Context</h2>
@@ -25,15 +25,14 @@
             <input type="radio" class="btn-check" name="emailOptions" id="emailReply" autocomplete="off">
             <label class="btn btn-secondary" for="emailReply">Reply to an email/s</label>
 
-            <div id="emailHistoryWrapper" style="display: none;"> 
-                <label for="content" class="form-label mt-3">Email History: dump all the emails in the conversation here</label>
-                <div class="input-group mb-3">
-                  <div class="form-floating">
-                    <textarea class="form-control" placeholder="Email content" id="content" style="height: 100px"></textarea>
-                    <!-- IMPORTANT: Changed 'for' attribute to "content" for accessibility -->
-                    <label for="content">Email History</label> 
-                  </div>
+            <div id="emailHistoryWrapper" style="display: none;">
+              <label for="content" class="form-label mt-3">Email History: dump all the emails in the conversation here</label>
+              <div class="input-group mb-3">
+                <div class="form-floating">
+                  <textarea class="form-control" placeholder="Email content" id="emailHistory" style="height: 100px"></textarea>
+                  <label for="content">Email History</label>
                 </div>
+              </div>
             </div>
           </div>
 
@@ -81,6 +80,7 @@
           <hr>
 
           <h2>2- Content</h2>
+          <p>Set and customize the parameters of the email.</p>
 
           <label for="" class="mb-2">What you want to say?</label>
           <div class="input-group mb-3">
@@ -95,10 +95,10 @@
               <div class="col">
                 <div class="form-floating mb-3">
                   <select class="form-select" id="tone">
-                    <option value="Formal">Formal</option>
-                    <option value="Casual" selected>Casual</option>
-                    <option value="Friendly">Friendly</option>
-                    <option value="Apology">Apology</option>
+                    <option value="0">Formal</option>
+                    <option value="1" selected>Casual</option>
+                    <option value="2">Friendly</option>
+                    <option value="3">Apology</option>
                   </select>
                   <label for="floatingSelectGrid">Tone</label>
                 </div>
@@ -106,19 +106,19 @@
               <div class="col">
                 <div class="form-floating mb-3">
                   <select class="form-select" id="urgency">
-                    <option value="High" class="text-danger">High</option>
-                    <option value="Normal" selected>Normal</option>
-                    <option value="Low" class="text-success">Low</option>
+                    <option value="2" class="text-danger">High</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="0" class="text-success">Low</option>
                   </select>
                   <label for="floatingSelectGrid">Urgency</label>
                 </div>
               </div>
               <div class="col">
                 <div class="form-floating mb-3">
-                  <select class="form-select" id="urgency">
-                    <option value="detailed">Detailed & Thorough</option>
-                    <option value="blanced" selected>Blanced</option>
-                    <option value="short">Short & Concise</option>
+                  <select class="form-select" id="length">
+                    <option value="2">Detailed & Thorough</option>
+                    <option value="1" selected>Blanced</option>
+                    <option value="0">Short & Concise</option>
                   </select>
                   <label for="floatingSelectGrid">Length</label>
                 </div>
@@ -127,8 +127,30 @@
             <div class="row">
               <div class="col">
                 <div class="d-grid gap-2 mt-2">
-                  <button class="btn btn-info btn-lg" id="enhanceButton" type="button" onclick="enhanceText()">Generate Email ✨</button>
+                  <button class="btn btn-info btn-lg" id="generateEmailButton" type="button" onclick="generateEmail()">Generate Email ✨</button>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div id="resultWrapper" style="display: none;">
+            <hr>
+
+            <h2>3- Result</h2>
+            <div class="input-group mb-3">
+              <div class="form-floating">
+                <p class="form-control" id="emailResult" style="height:auto">
+                  
+                  <div id="loadingText">
+                  <span class="placeholder col-7"></span>
+                  <span class="placeholder col-4"></span>
+                  <span class="placeholder col-4"></span>
+                  <span class="placeholder col-6"></span>
+                  <span class="placeholder col-8"></span>
+
+                  </div>
+
+                </p>
+                <label for="content">Generated Email</label>
               </div>
             </div>
           </div>

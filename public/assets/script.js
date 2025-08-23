@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Otherwise (if "New Email" is checked), hide the wrapper
             emailHistoryWrapper.style.display = 'none';
+            document.getElementById("emailHistory").value = "";
         }
     }
 
@@ -77,6 +78,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function generateEmail(){
+
+    //Hide and show the thingies
+    document.getElementById("generateEmailButton").disabled = true;
+    document.getElementById("newEmail").disabled = true;
+    document.getElementById("emailReply").disabled = true;
+    document.getElementById("emailHistory").disabled = true;
+    document.getElementById("title").disabled = true;
+    document.getElementById("name").disabled = true;
+    document.getElementById("relation").disabled = true;
+    document.getElementById("content").disabled = true;
+    document.getElementById("tone").disabled = true;
+    document.getElementById("urgency").disabled = true;
+    document.getElementById("length").disabled = true;
+    document.getElementById("resultWrapper").style.display = "block"
+
+
+    const emailHistory = document.getElementById("emailHistory").value;
+    const title = document.getElementById("title").value;
+    const name = document.getElementById("name").value;
+    const relation = document.getElementById("relation").value;
+    const content = document.getElementById("content").value;
+    const tone = document.getElementById("tone").value;
+    const urgency = document.getElementById("urgency").value;
+    const length = document.getElementById("length").value;
+
+    //TODO: Validate shit
+    
+    try {
+        const response = await fetch("http://127.0.0.1:8404/api/generateEmail", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "emailHistory": emailHistory,
+                "title": title,
+                "name": name,
+                "relation": relation,
+                "content": content,
+                "tone": tone,
+                "urgency": urgency,
+                "length": length,
+            })
+        });
+
+        const obj = await response.json()
+        console.log(obj.result);
+        document.getElementById("loadingText").style.display = "none"
+        document.getElementById("emailResult").innerText = obj.result
+    } catch (e) {
+
+    }
+
+    document.getElementById("generateEmailButton").disabled = false;
+    document.getElementById("newEmail").disabled = false;
+    document.getElementById("emailReply").disabled = false;
+    document.getElementById("emailHistory").disabled = false;
+    document.getElementById("title").disabled = false;
+    document.getElementById("name").disabled = false;
+    document.getElementById("relation").disabled = false;
+    document.getElementById("content").disabled = false;
+    document.getElementById("tone").disabled = false;
+    document.getElementById("urgency").disabled = false;
+    document.getElementById("length").disabled = false;
+
 
 }
 

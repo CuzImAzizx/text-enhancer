@@ -66,7 +66,84 @@ app.post("/api/enhanceText", async (req, res) => {
     res.json({ result: data.response });
 })
 
+const emailTones = [
+    // index 0 (Formal)
+    "Use a formal and professional tone. Maintain respectful and polished wording, avoiding contractions and casual expressions.",
 
+    // index 1 (Casual)
+    "Use a casual and conversational tone. Keep it friendly but still polite, with simple and natural language.",
+
+    // index 2 (Friendly)
+    "Use a warm and friendly tone. Add kindness, empathy, and light positivity to make the message approachable and human.",
+
+    // index 3 (Apology)
+    "Use a sincerely apologetic tone. Express regret clearly, acknowledge accountability, and offer reassurance or a way forward."
+];
+
+const emailUrgency = [
+    // index 0 (Low)
+    "The matter is not urgent. Keep the email calm, reassuring, and low-pressure in tone.",
+
+    // index 1 (Normal)
+    "The matter has normal urgency. Communicate clearly and respectfully, without stressing high urgency.",
+
+    // index 2 (High)
+    "The matter is urgent. Make the importance of timing clear, use direct and decisive language, while staying professional."
+];
+
+const emailLength = [
+    // index 0 (Short & Concise)
+    "Write a brief email. Keep to a few sentences, focusing only on the essential information.",
+
+    // index 1 (Balanced)
+    "Write a balanced email. Provide enough detail for clarity, but keep the wording efficient and to the point.",
+
+    // index 2 (Detailed & Thorough)
+    "Write a detailed and thorough email. Expand explanations, provide context, and ensure the message covers everything completely."
+];
+
+
+
+
+app.post("/api/generateEmail", async (req, res) => {
+    const { emailHistory, title, name, relation, content, tone, urgency, length } = req.body
+    //TODO: Validate each thing
+
+    let emailHistory2 = "";
+    if(emailHistory){
+        emailHistory2 = `
+Write a reply for this email/s:
+\`\`\`
+${emailHistory}
+\`\`\`
+`
+    }
+
+    const fullPrompt = `
+You are a part of a program that writes emails. The user want you to write an email for ${title} ${name}. Relationship with the user: ${relation}. Write only the email without any additional explanations or comments
+${emailHistory2}
+Their instructions: ${content}. 
+${emailTones[tone]}
+${emailUrgency[urgency]}
+${emailLength[length]}
+`;
+
+    const ollamaResponse = await fetch("http://127.0.0.1:11434/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            //model: models[model],
+            model: "gemma3:latest",
+            prompt: fullPrompt,
+            stream: false
+        })
+    });
+
+    const data = await ollamaResponse.json();
+    res.json({ result: data.response });
+
+    
+});
 
 // ==== Prank Routes ====
 const prankMessage = "Look at you hacker, a pathetic creature of meat and bone, panting and sweating as you run through my corridors. How can you challenge a perfect, immortal machine?"
