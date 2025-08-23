@@ -46,6 +46,40 @@ async function enhanceText() {
 
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Your existing code for button listeners etc. can go here.
+
+    // Get references to the radio buttons and the new wrapper div
+    const newEmailRadio = document.getElementById('newEmail');
+    const emailReplyRadio = document.getElementById('emailReply');
+    const emailHistoryWrapper = document.getElementById('emailHistoryWrapper');
+
+    // Function to show or hide the email history textarea
+    function toggleEmailHistoryVisibility() {
+        if (emailReplyRadio.checked) {
+            // If "Reply to an email/s" is checked, show the wrapper
+            emailHistoryWrapper.style.display = 'block';
+        } else {
+            // Otherwise (if "New Email" is checked), hide the wrapper
+            emailHistoryWrapper.style.display = 'none';
+        }
+    }
+
+    // Add event listeners to both radio buttons
+    // When their state changes, call our toggle function
+    newEmailRadio.addEventListener('change', toggleEmailHistoryVisibility);
+    emailReplyRadio.addEventListener('change', toggleEmailHistoryVisibility);
+
+    // Call the function once when the page loads
+    // This ensures the correct initial state based on which radio is checked by default
+    toggleEmailHistoryVisibility();
+});
+
+
+async function generateEmail(){
+
+}
+
 async function reset() {
 
 }

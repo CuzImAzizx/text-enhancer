@@ -14,7 +14,9 @@ app.get("/", (req, res) => {
     res.render("home.ejs")
 })
 
-
+app.get("/email", (req, res) => {
+    res.render("email.ejs")
+})
 
 // ==== API Routes ====
 const systemPrompts = [

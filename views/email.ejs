@@ -1,0 +1,141 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
+<div style="text-align: center; margin: 0% 10% 0% 10%;" class="mb-4 mt-4">
+  <h1>Advanced Email Writer</h1>
+  <p>Write professional smart emails with LLMs</p>
+  <hr>
+
+</div>
+
+
+
+<div class="container" style="text-align: center;">
+
+  <div class="container">
+
+    <div class="container mt-3" style="width: 60%;">
+      <div class="card">
+        <div class="card-body">
+          <h2>1- Context</h2>
+          <div class="container text-center mt-3">
+            <p>Is this a new email or reply to an existing email?</p>
+            <input type="radio" class="btn-check" name="emailOptions" id="newEmail" autocomplete="off" checked>
+            <label class="btn btn-primary" for="newEmail">New Email</label>
+            <input type="radio" class="btn-check" name="emailOptions" id="emailReply" autocomplete="off">
+            <label class="btn btn-secondary" for="emailReply">Reply to an email/s</label>
+
+            <div id="emailHistoryWrapper" style="display: none;"> 
+                <label for="content" class="form-label mt-3">Email History: dump all the emails in the conversation here</label>
+                <div class="input-group mb-3">
+                  <div class="form-floating">
+                    <textarea class="form-control" placeholder="Email content" id="content" style="height: 100px"></textarea>
+                    <!-- IMPORTANT: Changed 'for' attribute to "content" for accessibility -->
+                    <label for="content">Email History</label> 
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+          <div class="container text-center ">
+            <div class="row">
+              <div class="col">
+                <label for="" class="form-label">Receiver's name</label>
+                <div class="input-group mb-3">
+                  <div style="width: 35%; padding-right: 5px;">
+                    <div class="form-floating mb-3">
+                      <select class="form-select" id="title">
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Miss.">Miss.</option>
+                        <option value="Dr.">Dr.</option>
+                        <option value="Prof.">Prof.</option>
+                        <option value="Do not specify">Do not specify</option>
+                      </select>
+                      <label for="floatingSelectGrid">Title</label>
+                    </div>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="name" placeholder="Receiver's Name">
+                    <label for="floatingInput">Receiver's Name</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <label for="relation" class="form-label">Receiver's relation to you</label>
+                <div class="form-floating mb-3">
+                  <input type="text" list="relationList" class="form-control" id="relation" placeholder="Receiver's relation">
+                  <label for="floatingInput">Receiver's relation</label>
+                </div>
+
+                <datalist id="relationList">
+                  <option value="Professor">
+                  <option value="Client">
+                  <option value="Friend">
+                  <option value="Unknown Recipient">
+                </datalist>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+          <h2>2- Content</h2>
+
+          <label for="" class="mb-2">What you want to say?</label>
+          <div class="input-group mb-3">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Email content" id="content" style="height: 100px"></textarea>
+              <label for="floatingTextarea2">Email content</label>
+            </div>
+          </div>
+
+          <div class="container text-center mt-3">
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="tone">
+                    <option value="Formal">Formal</option>
+                    <option value="Casual" selected>Casual</option>
+                    <option value="Friendly">Friendly</option>
+                    <option value="Apology">Apology</option>
+                  </select>
+                  <label for="floatingSelectGrid">Tone</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="urgency">
+                    <option value="High" class="text-danger">High</option>
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Low" class="text-success">Low</option>
+                  </select>
+                  <label for="floatingSelectGrid">Urgency</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="urgency">
+                    <option value="detailed">Detailed & Thorough</option>
+                    <option value="blanced" selected>Blanced</option>
+                    <option value="short">Short & Concise</option>
+                  </select>
+                  <label for="floatingSelectGrid">Length</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="d-grid gap-2 mt-2">
+                  <button class="btn btn-info btn-lg" id="enhanceButton" type="button" onclick="enhanceText()">Generate Email ✨</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%- include("partials/footer") %>
