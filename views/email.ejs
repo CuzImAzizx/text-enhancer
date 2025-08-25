@@ -50,7 +50,7 @@
                         <option value="Miss.">Miss.</option>
                         <option value="Dr.">Dr.</option>
                         <option value="Prof.">Prof.</option>
-                        <option value="Do not specify">Do not specify</option>
+                        <option value="">Do not specify</option>
                       </select>
                       <label for="floatingSelectGrid">Title</label>
                     </div>
@@ -127,7 +127,17 @@
             <div class="row">
               <div class="col">
                 <div class="d-grid gap-2 mt-2">
-                  <button class="btn btn-info btn-lg" id="generateEmailButton" type="button" onclick="generateEmail()">Generate Email ✨</button>
+
+
+                  <div class="btn-group btn-group-lg" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-info btn-lg" id="generateEmailButton" onclick="generateEmail()">Generate Email ✨</button>
+
+                    <select class="form-select" id="model" style="width: 15%;">
+                      <% for(let i = 0; i < models.length; i++){ %>
+                        <option value="<%= i %>"><%= models[i] %></option>
+                        <% } %>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,16 +148,16 @@
             <h2>3- Result</h2>
             <div class="input-group mb-3">
               <div class="form-floating">
-                <p class="form-control" id="emailResult" style="height:auto">
-                  
-                  <div id="loadingText">
+                <p class="form-control" id="emailResult" style="height:auto; text-align: left;">
+
+                <div id="loadingText">
                   <span class="placeholder col-7"></span>
                   <span class="placeholder col-4"></span>
                   <span class="placeholder col-4"></span>
                   <span class="placeholder col-6"></span>
                   <span class="placeholder col-8"></span>
 
-                  </div>
+                </div>
 
                 </p>
                 <label for="content">Generated Email</label>

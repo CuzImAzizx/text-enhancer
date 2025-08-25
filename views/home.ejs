@@ -34,10 +34,9 @@
                 <div class="col">
                   <div class="form-floating">
                     <select class="form-select" id="model" aria-label="Floating label select example">
-                      <option selected value="0">Gemma 3</option>
-                      <option value="1" disabled>Qwen 3</option>
-                      <option value="2" disabled>GPT 4o mini</option>
-                      <option value="3" disabled>Gemini 2.5 Flash</option>
+                      <% for(let i = 0; i < models.length; i++) { %>
+                        <option value="<%= i %>"><%= models[i] %></option>
+                        <% } %>
                     </select>
                     <label for="model">LLM Model</label>
                   </div>

@@ -91,7 +91,10 @@ async function generateEmail(){
     document.getElementById("tone").disabled = true;
     document.getElementById("urgency").disabled = true;
     document.getElementById("length").disabled = true;
-    document.getElementById("resultWrapper").style.display = "block"
+    document.getElementById("resultWrapper").style.display = "block";
+
+    document.getElementById("loadingText").style.display = "block";
+    document.getElementById("emailResult").innerText = "";
 
 
     const emailHistory = document.getElementById("emailHistory").value;
@@ -102,6 +105,7 @@ async function generateEmail(){
     const tone = document.getElementById("tone").value;
     const urgency = document.getElementById("urgency").value;
     const length = document.getElementById("length").value;
+    const model = document.getElementById("model").value;
 
     //TODO: Validate shit
     
@@ -120,6 +124,7 @@ async function generateEmail(){
                 "tone": tone,
                 "urgency": urgency,
                 "length": length,
+                "model": model,
             })
         });
 
