@@ -2,8 +2,8 @@
 <%- include("partials/navbar") %>
 
 <div style="text-align: center; margin: 0% 10% 0% 10%;" class="mb-4 mt-4">
-  <h1>Shit Enhancer</h1>
-  <p>A tool that uses LLM to enhance your shit</p>
+  <h1>Text Enhancer</h1>
+  <p>A tool that uses LLM to enhance your text</p>
   <hr>
 
 </div>
@@ -15,8 +15,8 @@
           <div class="col">
 
             <div class="form-floating">
-              <textarea class="form-control" placeholder="Write your shit here" id="before" style="height: 200px" maxlength="512"></textarea>
-              <label for="before">Write your shit here</label>
+              <textarea class="form-control" placeholder="Write your text here" id="before" style="height: 200px" maxlength="512"></textarea>
+              <label for="before">Write your text here</label>
             </div>
             <div class="container text-center mt-3">
               <div class="row">
@@ -53,7 +53,7 @@
               <div class="row mt-3">
                 <div class="col">
                   <div class="d-grid gap-2">
-                    <button class="btn btn-info btn-lg" id="enhanceButton" type="button" onclick="enhanceText()">Enahnce Shit ✨</button>
+                    <button class="btn btn-info btn-lg" id="enhanceButton" type="button" onclick="enhanceText()">Enahnce Text ✨</button>
                   </div>
                 </div>
               </div>
@@ -63,7 +63,7 @@
             <div class="form-floating" id="textArea" style="display: block;">
               <p class="form-control mb-3" id="after" style="height: 200px; text-align: left;">
               </p>
-              <label for="after">Your enhanced shit will show here</label>
+              <label for="after">Your enhanced text will show here</label>
             </div>
 
             <div class="form-floating" id="loadingText" style="display: none;">
@@ -76,20 +76,21 @@
                 <span class="placeholder col-8"></span>
                 <span class="placeholder col-7"></span>
               </p>
-              <label for="after">Your enhanced shit will show here</label>
+              <label for="after">Your enhanced text will show here</label>
             </div>
 
-
+            <!--
             <div class="container text-center mt-3">
-              <div class="row" style="display: flex;">
+              <div class="row" id="resultOptions" style="display: flex;">
                 <div class="col">
-                  <button class="btn btn-secondary btn-lg" id="copyButton" type="button">🗐 Copy</button>
+                  <button class="btn btn-secondary" id="copyButton" style="width: 95%;" type="button">📃 Copy</button>
                 </div>
                 <div class="col">
-                  <button class="btn btn-secondary btn-lg" id="retryButton" type="button" onclick="enhanceText()">↻ Try Again</button>
+                  <button class="btn btn-secondary" id="retryButton" type="button" style="width: 95%;" onclick="enhanceText()">🔄 Try Again</button>
                 </div>
               </div>
             </div>
+            -->
           </div>
 
         </div>

@@ -10,12 +10,9 @@ app.use(bodyParser.json());
 
 // ==== Starting procedures ====
 
-let models = [
-    //"gemma3:latest",
-    //"qwen3:4b",
-]
+let models = []
 
-const response = fetch("http://127.0.0.1:11434/api/tags")
+fetch("http://127.0.0.1:11434/api/tags")
 .then(res => {
     res.json()
     .then(data => {
@@ -34,6 +31,12 @@ const response = fetch("http://127.0.0.1:11434/api/tags")
 app.get("/", (req, res) => {
     console.log(models);
     res.render("home.ejs", {models: models})
+})
+
+
+app.get("/about", (req, res) => {
+    console.log(models);
+    res.send("TODO: Implement about page")
 })
 
 app.get("/email", (req, res) => {
@@ -142,17 +145,15 @@ ${emailHistory}
     const fullPrompt = `
 You are a part of a program that writes emails. The user want you to write an email for ${title} ${name}. Relationship with the user: ${relation}. Write only the email without any additional explanations or comments.
 ${emailHistory2}
-Their instructions: ${content}. 
+The user want to say / write in the email: ${content}. 
 ${emailTones[tone]}
 ${emailUrgency[urgency]}
 ${emailLength[length]}
 `;
-console.log(fullPrompt);
     const ollamaResponse = await fetch("http://127.0.0.1:11434/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            //model: models[model],
             model: models[model],
             prompt: fullPrompt,
             stream: false
@@ -173,6 +174,10 @@ app.get("/.env", (req, res) => {
 })
 
 app.get("/.ssh", (req, res) => {
+    res.send(prankMessage)
+})
+
+app.get("/.git", (req, res) => {
     res.send(prankMessage)
 })
 

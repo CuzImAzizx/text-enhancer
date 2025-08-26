@@ -14,23 +14,26 @@
 
   <div class="container">
 
-    <div class="container mt-3" style="width: 60vw;">
+    <div class="container mt-3">
       <div class="card">
         <div class="card-body">
+          <div class="card-header mb-4">
           <h2>1- Context</h2>
-          <div class="container text-center mt-3">
-            <p>Is this a new email or reply to an existing email?</p>
+          <p class="mb-0">Set the context for more professional emails</p>
+          </div>
+          <div class="container text-center mb-3">
+            <p class="mb-1">Is this a new email or reply to an existing email?</p>
             <input type="radio" class="btn-check" name="emailOptions" id="newEmail" autocomplete="off" checked>
             <label class="btn btn-primary" for="newEmail">New Email</label>
             <input type="radio" class="btn-check" name="emailOptions" id="emailReply" autocomplete="off">
             <label class="btn btn-secondary" for="emailReply">Reply to an email/s</label>
 
             <div id="emailHistoryWrapper" style="display: none;">
-              <label for="content" class="form-label mt-3">Email History: dump all the emails in the conversation here</label>
+              <label for="emailHistory" class="form-label mt-3">Email History: dump all emails in the conversation here</label>
               <div class="input-group mb-3">
                 <div class="form-floating">
                   <textarea class="form-control" placeholder="Email content" id="emailHistory" style="height: 100px"></textarea>
-                  <label for="content">Email History</label>
+                  <label for="emailHistory">Email History</label>
                 </div>
               </div>
             </div>
@@ -40,7 +43,7 @@
           <div class="container text-center ">
             <div class="row">
               <div class="col">
-                <label for="" class="form-label">Receiver's name</label>
+                <label for="name" class="form-label">Receiver's name</label>
                 <div class="input-group mb-3">
                   <div style="width: 35%; padding-right: 5px;">
                     <div class="form-floating mb-3">
@@ -50,6 +53,7 @@
                         <option value="Miss.">Miss.</option>
                         <option value="Dr.">Dr.</option>
                         <option value="Prof.">Prof.</option>
+                        <option value="Eng.">Eng.</option>
                         <option value="">Do not specify</option>
                       </select>
                       <label for="floatingSelectGrid">Title</label>
@@ -79,10 +83,12 @@
           </div>
           <hr>
 
+          <div class="card-header mb-4">
           <h2>2- Content</h2>
-          <p>Set and customize the parameters of the email.</p>
+          <p class="mb-0">Set and customize the parameters of the email</p>
+          </div>
 
-          <label for="" class="mb-2">What you want to say?</label>
+          <label for="content" class="mb-2">What do you want to say? <span style="font-size: 10px;"><i>Describe what you want in natural language</i></span></label>
           <div class="input-group mb-3">
             <div class="form-floating">
               <textarea class="form-control" placeholder="Email content" id="content" style="height: 100px"></textarea>
@@ -95,12 +101,12 @@
               <div class="col">
                 <div class="form-floating mb-3">
                   <select class="form-select" id="tone">
-                    <option value="0">Formal</option>
-                    <option value="1" selected>Casual</option>
-                    <option value="2">Friendly</option>
-                    <option value="3">Apology</option>
+                    <option value="0">💼 Formal</option>
+                    <option value="1" selected>🙇 Casual</option>
+                    <option value="2">🤗 Friendly</option>
+                    <option value="3">🙏 Apology</option>
                   </select>
-                  <label for="floatingSelectGrid">Tone</label>
+                  <label for="tone">Tone</label>
                 </div>
               </div>
               <div class="col">
@@ -134,8 +140,8 @@
 
                     <select class="form-select" id="model" style="width: 15%;">
                       <% for(let i = 0; i < models.length; i++){ %>
-                        <option value="<%= i %>"><%= models[i] %></option>
-                        <% } %>
+                      <option value="<%= i %>"><%= models[i] %></option>
+                      <% } %>
                     </select>
                   </div>
                 </div>
@@ -145,20 +151,32 @@
           <div id="resultWrapper" style="display: none;">
             <hr>
 
-            <h2>3- Result</h2>
+            <div class="card-header mb-3 mt-3">
+              <h2>3- Result</h2>
+            </div>
             <div class="input-group mb-3">
               <div class="form-floating">
                 <p class="form-control" id="emailResult" style="height:auto; text-align: left;">
 
-                <div id="loadingText">
+                </p>
+                <label for="content">Generated Email</label>
+              </div>
+            </div>
+          </div>
+
+          <div id="loadingText" style="display: none;">
+            <hr>
+            <div class="card-header mb-3 mt-3">
+              <h2>3- Result</h2>
+            </div>
+            <div class="input-group mb-3 mt-3">
+              <div class="form-floating">
+                <p class="form-control" style="height:auto; text-align: left;">
                   <span class="placeholder col-7"></span>
                   <span class="placeholder col-4"></span>
                   <span class="placeholder col-4"></span>
                   <span class="placeholder col-6"></span>
                   <span class="placeholder col-8"></span>
-
-                </div>
-
                 </p>
                 <label for="content">Generated Email</label>
               </div>

@@ -91,7 +91,7 @@ async function generateEmail(){
     document.getElementById("tone").disabled = true;
     document.getElementById("urgency").disabled = true;
     document.getElementById("length").disabled = true;
-    document.getElementById("resultWrapper").style.display = "block";
+    //document.getElementById("resultWrapper").style.display = "block";
 
     document.getElementById("loadingText").style.display = "block";
     document.getElementById("emailResult").innerText = "";
@@ -130,6 +130,7 @@ async function generateEmail(){
 
         const obj = await response.json()
         console.log(obj.result);
+        document.getElementById("resultWrapper").style.display = "block";
         document.getElementById("loadingText").style.display = "none"
         document.getElementById("emailResult").innerText = obj.result
     } catch (e) {
