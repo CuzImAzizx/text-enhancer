@@ -4,17 +4,11 @@ async function enhanceText() {
     document.getElementById("enhanceButton").disabled = true;
 
     const text = document.getElementById("before").value
-    // Validate text
-    // 512 characters
-
     const model = document.getElementById("model").value
-    // Validate it's within range 0 1 2 3
-
     const mode = document.getElementById("mode").value
-    // Validate it's within range 0 1 2 3
 
     try {
-        const response = await fetch("http://127.0.0.1:8404/api/enhanceText", {
+        const response = await fetch(`${frontendConfig.fullAppURL}/api/enhanceText`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -32,11 +26,15 @@ async function enhanceText() {
 
         const text1 = text
         const text2 = obj.result;
+        if(mode == 0){
         const [highlightedText1, highlightedText2] = compareAndHighlight(text1, text2);
         document.getElementById("after").innerHTML = highlightedText2;
+        } else {
+            document.getElementById("after").innerText = text2;
+        }
 
     } catch (e) {
-        //document.writeln("You are cooked")
+        document.writeln("The app crashed. You've done something wrong")
     }
 
     document.getElementById("enhanceButton").disabled = false;
@@ -91,7 +89,7 @@ async function generateEmail(){
     document.getElementById("tone").disabled = true;
     document.getElementById("urgency").disabled = true;
     document.getElementById("length").disabled = true;
-    //document.getElementById("resultWrapper").style.display = "block";
+    document.getElementById("resultWrapper").style.display = "none";
 
     document.getElementById("loadingText").style.display = "block";
     document.getElementById("emailResult").innerText = "";
@@ -110,7 +108,7 @@ async function generateEmail(){
     //TODO: Validate shit
     
     try {
-        const response = await fetch("http://127.0.0.1:8404/api/generateEmail", {
+        const response = await fetch(`${frontendConfig.fullAppURL}/api/generateEmail`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -180,10 +178,10 @@ function compareAndHighlight(str1, str2) {
         } else {
             // If words are different, wrap them in our highlight span!
             if (word1 !== '') {
-                resultHtml1 += `<span class="text-success">${word1}</span> `;
+                resultHtml1 += `<span class="text-success" style="font-weight: 700">${word1}</span> `;
             }
             if (word2 !== '') {
-                resultHtml2 += `<span class="text-success">${word2}</span> `;
+                resultHtml2 += `<span class="text-success" style="font-weight: 700">${word2}</span> `;
             }
         }
     }
