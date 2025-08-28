@@ -1,8 +1,7 @@
 // ==== Start Config ====
 const appPort = 8404;
-const appURL = `http://127.0.0.1`; // Don't add additional / at the end of the url
-const ollamaURL = "http://127.0.0.1:11434";
-const allowedModels = ["gemma3:4b"]
+const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not in the same host
+const allowedModels = ["gemma3:4b"] // Set this array empty to allow all the models
 // ==== End config
 
 // ==== Starting procedures ====
@@ -13,11 +12,7 @@ const bodyParser = require ("body-parser");
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json());
-const fullAppURL = `${appURL}:${appPort}`
 app.listen(appPort);
-const frontendConfig = { // To pass to ejs
-    fullAppURL: fullAppURL,
-};
 
 
 let models = []
@@ -28,10 +23,14 @@ fetch(`${ollamaURL}/api/tags`)
     .then(data => {
         const ollamaModels = data.models;
         ollamaModels.forEach((ollamaModel, i) => {
-            allowedModels.forEach(allowedModel => {
-            if(ollamaModel.model == allowedModel)
+            if(allowedModels.length != 0){
+                allowedModels.forEach(allowedModel => {
+                if(ollamaModel.model == allowedModel)
+                    models.push(ollamaModel.model);
+                })
+            } else {
                 models.push(ollamaModel.model);
-            })
+            }
         });
         console.log("Got the models:", models);
     })    
@@ -45,7 +44,6 @@ fetch(`${ollamaURL}/api/tags`)
 app.get("/", (req, res) => {
     res.render("home.ejs", {
         models: models,
-        frontendConfig: frontendConfig
     })
 })
 
@@ -57,7 +55,6 @@ app.get("/about", (req, res) => {
 app.get("/email", (req, res) => {
     res.render("email.ejs", {
         models: models,
-        frontendConfig: frontendConfig
     })
 })
 

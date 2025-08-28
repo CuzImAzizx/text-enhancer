@@ -61,13 +61,14 @@
           </div>
           <div class="col">
             <div class="form-floating" id="textArea" style="display: block;">
-              <p class="form-control mb-3" id="after" style="height: 200px; text-align: left;">
+              <p class="form-control mb-3" id="after" style="min-height: 200px; height: auto; text-align: left;">
               </p>
               <label for="after">Your enhanced version will appear here.</label>
             </div>
+            <input type="text" id="hiddenResultOnly" style="display: none;"></span>
 
             <div class="form-floating" id="loadingText" style="display: none;">
-              <p class="form-control mb-3" id="after" style="height: 200px; text-align: left;">
+              <p class="form-control mb-3" id="after" style="min-height: 200px; text-align: left;">
 
                 <span class="placeholder col-7"></span>
                 <span class="placeholder col-4"></span>
@@ -78,19 +79,18 @@
               </p>
               <label for="after">Your enhanced text will show here</label>
             </div>
-
-            <!--
-            <div class="container text-center mt-3">
-              <div class="row" id="resultOptions" style="display: flex;">
+            
+            <div class="container text-center mt-3" id="resultOptions" style="display: none;">
+              <div class="row">
                 <div class="col">
-                  <button class="btn btn-secondary" id="copyButton" style="width: 95%;" type="button">📃 Copy</button>
+                  <button class="btn btn-secondary" id="copyButton" style="width: 95%;" type="button" onclick="copyText()">📃 Copy</button>
                 </div>
                 <div class="col">
                   <button class="btn btn-secondary" id="retryButton" type="button" style="width: 95%;" onclick="enhanceText()">🔄 Try Again</button>
                 </div>
               </div>
             </div>
-            -->
+
           </div>
 
         </div>
@@ -100,6 +100,17 @@
   </div>
 </div>
 
+<script>
+  const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+if (toastTrigger) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}
+</script>
 <script src="assets/diff.js"></script>
 
 <%- include("partials/footer") %>

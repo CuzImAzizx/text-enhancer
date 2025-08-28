@@ -1,15 +1,23 @@
 async function enhanceText() {
-    document.getElementById("loadingText").style.display = "block"
-    document.getElementById("textArea").style.display = "none"
-    document.getElementById("enhanceButton").disabled = true;
-    removeAllChildNodes(document.getElementById("after"))
 
     const text = document.getElementById("before").value
     const model = document.getElementById("model").value
     const mode = document.getElementById("mode").value
 
+
+    if(text == ""){
+        showToast("Please provide a text.");
+        return;
+    }
+
+    document.getElementById("loadingText").style.display = "block"
+    document.getElementById("textArea").style.display = "none"
+    document.getElementById("enhanceButton").disabled = true;
+    removeAllChildNodes(document.getElementById("after"))
+    document.getElementById("hiddenResultOnly").innerText = "";
+
     try {
-        const response = await fetch(`${frontendConfig.fullAppURL}/api/enhanceText`, {
+        const response = await fetch(`api/enhanceText`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -56,20 +64,45 @@ async function enhanceText() {
             });
 
             display.appendChild(fragment);
+            document.getElementById("hiddenResultOnly").innerText = text2;
         } else {
             document.getElementById("after").innerText = text2;
+            document.getElementById("hiddenResultOnly").innerText = text2;
         }
 
     } catch (e) {
-        // punish the user for error
+        // punish user for error
         document.writeln("The app crashed. You've done something wrong")
     }
 
     document.getElementById("enhanceButton").disabled = false;
     document.getElementById("loadingText").style.display = "none"
     document.getElementById("textArea").style.display = "block"
+    document.getElementById("resultOptions").style.display = "block"
 
 
+}
+
+function enableThingsEnhanceText(){
+    document.getElementById("enhanceButton").disabled = false;
+    document.getElementById("loadingText").style.display = "none"
+    document.getElementById("textArea").style.display = "block"
+    document.getElementById("resultOptions").style.display = "block"
+
+}
+function disableThingsEnhanceText(){
+    document.getElementById("loadingText").style.display = "block"
+    document.getElementById("textArea").style.display = "none"
+    document.getElementById("enhanceButton").disabled = true;
+    removeAllChildNodes(document.getElementById("after"))
+    document.getElementById("hiddenResultOnly").innerText = "";
+
+}
+
+function copyText(){
+    const textField = document.getElementById("hiddenResultOnly");
+    const textToCopy = textField.innerText;
+    navigator.clipboard.writeText(textToCopy);
 }
 
 function removeAllChildNodes(parent) {
@@ -108,8 +141,50 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleEmailHistoryVisibility();
 });
 
+function showToast(message) {
+    const toastLiveExample = document.getElementById('liveToastDanger');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    document.getElementById('liveToastDangerBody').innerText = message;
+    toastBootstrap.show();
+}
+
 
 async function generateEmail() {
+
+    const emailHistory = document.getElementById("emailHistory").value;
+    const title = document.getElementById("title").value;
+    const name = document.getElementById("name").value;
+    const relation = document.getElementById("relation").value;
+    const content = document.getElementById("content").value;
+    const tone = document.getElementById("tone").value;
+    const urgency = document.getElementById("urgency").value;
+    const length = document.getElementById("length").value;
+    const model = document.getElementById("model").value;
+
+    // Helper function to check if a value is null or empty
+    function isEmpty(value) {
+        return value === null || value === "";
+    }
+
+    if (isEmpty(title)) {
+        showToast("Please provide a title.");
+        return;
+    }
+
+    if (isEmpty(name)) {
+        showToast("Please provide a name.");
+        return;
+    }
+
+    if (isEmpty(relation)) {
+        showToast("Please specify the relationship.");
+        return;
+    }
+
+    if (isEmpty(content)) {
+        showToast("Please provide the content.");
+        return;
+    }
 
     //Hide and show the thingies
     document.getElementById("generateEmailButton").disabled = true;
@@ -128,21 +203,10 @@ async function generateEmail() {
     document.getElementById("loadingText").style.display = "block";
     document.getElementById("emailResult").innerText = "";
 
-
-    const emailHistory = document.getElementById("emailHistory").value;
-    const title = document.getElementById("title").value;
-    const name = document.getElementById("name").value;
-    const relation = document.getElementById("relation").value;
-    const content = document.getElementById("content").value;
-    const tone = document.getElementById("tone").value;
-    const urgency = document.getElementById("urgency").value;
-    const length = document.getElementById("length").value;
-    const model = document.getElementById("model").value;
-
     //TODO: Validate shit
 
     try {
-        const response = await fetch(`${frontendConfig.fullAppURL}/api/generateEmail`, {
+        const response = await fetch(`api/generateEmail`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
