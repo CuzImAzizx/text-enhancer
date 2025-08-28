@@ -2,6 +2,7 @@ async function enhanceText() {
     document.getElementById("loadingText").style.display = "block"
     document.getElementById("textArea").style.display = "none"
     document.getElementById("enhanceButton").disabled = true;
+    removeAllChildNodes(document.getElementById("after"))
 
     const text = document.getElementById("before").value
     const model = document.getElementById("model").value
@@ -26,14 +27,41 @@ async function enhanceText() {
 
         const text1 = text
         const text2 = obj.result;
-        if(mode == 0){
-        const [highlightedText1, highlightedText2] = compareAndHighlight(text1, text2);
-        document.getElementById("after").innerHTML = highlightedText2;
+        if (mode == 0) {
+            //const [highlightedText1, highlightedText2] = compareAndHighlight(text1, text2);
+            //document.getElementById("after").innerHTML = highlightedText2;
+
+            let span = null;
+
+            const diff = Diff.diffWords(text1, text2),
+                display = document.getElementById('after'),
+                fragment = document.createDocumentFragment();
+
+            diff.forEach((part) => {
+                // green for additions, red for deletions
+                // grey for common parts
+                const classes = part.added ? 'text-success' :
+                    part.removed ? 'text-danger' : '';
+
+                span = document.createElement('span');
+
+                if (classes) {
+                    span.className = classes;
+                    if(classes == "text-success")
+                        span.style.fontWeight = "700";
+                }
+                span.appendChild(document
+                    .createTextNode(part.value));
+                fragment.appendChild(span);
+            });
+
+            display.appendChild(fragment);
         } else {
             document.getElementById("after").innerText = text2;
         }
 
     } catch (e) {
+        // punish the user for error
         document.writeln("The app crashed. You've done something wrong")
     }
 
@@ -42,6 +70,12 @@ async function enhanceText() {
     document.getElementById("textArea").style.display = "block"
 
 
+}
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-async function generateEmail(){
+async function generateEmail() {
 
     //Hide and show the thingies
     document.getElementById("generateEmailButton").disabled = true;
@@ -106,7 +140,7 @@ async function generateEmail(){
     const model = document.getElementById("model").value;
 
     //TODO: Validate shit
-    
+
     try {
         const response = await fetch(`${frontendConfig.fullAppURL}/api/generateEmail`, {
             method: 'POST',
@@ -154,7 +188,7 @@ async function reset() {
 
 }
 
-
+// Legacy function, AI generated.
 function compareAndHighlight(str1, str2) {
     // Simple approach: split by spaces to get words.
     // For more robust parsing (punctuation, etc.), you might use regex.

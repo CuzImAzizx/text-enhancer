@@ -1,6 +1,6 @@
 // ==== Start Config ====
 const appPort = 8404;
-const appURL = `http://127.0.0.1`;
+const appURL = `http://127.0.0.1`; // Don't add additional / at the end of the url
 const ollamaURL = "http://127.0.0.1:11434";
 const allowedModels = ["gemma3:4b"]
 // ==== End config
@@ -28,7 +28,6 @@ fetch(`${ollamaURL}/api/tags`)
     .then(data => {
         const ollamaModels = data.models;
         ollamaModels.forEach((ollamaModel, i) => {
-            // You can choose which model is allowed. In this case, all models are allowed.
             allowedModels.forEach(allowedModel => {
             if(ollamaModel.model == allowedModel)
                 models.push(ollamaModel.model);
