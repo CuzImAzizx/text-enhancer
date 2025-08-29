@@ -1,7 +1,7 @@
 
 /* Copy Button */
 .copyButton {
-  background-color: #f2f7fa;
+  background-color: #63c6ef;
   width: 100px;
   height: 30px;
   border: none;
@@ -13,7 +13,7 @@
 }
 
 .copyButton span:first-child {
-  color: #0e418f;
+  color: #000000;
   position: absolute;
   transform: translate(-50%, -50%);
 }
@@ -50,7 +50,7 @@
 }
 
 .copyButton:focus:end {
-  background-color: #ffffff;
+  background-color: #63c7ef;
   width: 120px;
   height: 40px;
   transition-duration: 900ms;

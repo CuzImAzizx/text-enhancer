@@ -1,7 +1,7 @@
-// ==== Start Config ====
+// ==== Start config ====
 const appPort = 8404;
-const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not in the same host
-const allowedModels = ["gemma3:4b"] // Set this array empty to allow all the models
+const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not on the same host
+const allowedModels = [] // Set this array empty to allow all models
 // ==== End config
 
 // ==== Starting procedures ====
@@ -38,6 +38,8 @@ fetch(`${ollamaURL}/api/tags`)
     console.log("Couldn't connect to Ollama Server");
     process.exit(1);
 })
+
+console.log("The app is listening on port 8404")
 
 // ==== View Routes ====
 
