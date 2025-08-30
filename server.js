@@ -32,14 +32,14 @@ fetch(`${ollamaURL}/api/tags`)
                 models.push(ollamaModel.model);
             }
         });
-        console.log("Got the models:", models);
+        console.log(`Got ${models.length} models from Ollama`);
     })    
 }).catch(e => {
     console.log("Couldn't connect to Ollama Server");
     process.exit(1);
 })
 
-console.log("The app is listening on port 8404")
+console.log(`The app is listening on http://127.0.0.1:${appPort}`)
 
 // ==== View Routes ====
 

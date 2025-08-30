@@ -46,8 +46,6 @@ async function enhanceText() {
                 fragment = document.createDocumentFragment();
 
             diff.forEach((part) => {
-                // green for additions, red for deletions
-                // grey for common parts
                 const classes = part.added ? 'text-success' :
                     part.removed ? 'text-danger' : '';
 
@@ -57,6 +55,8 @@ async function enhanceText() {
                     span.className = classes;
                     if(classes == "text-success")
                         span.style.fontWeight = "700";
+                    if(classes == "text-danger")
+                        span.style.textDecoration = "line-through";
                 }
                 span.appendChild(document
                     .createTextNode(part.value));
