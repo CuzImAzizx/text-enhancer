@@ -103,6 +103,7 @@ function copyText(){
     const textField = document.getElementById("hiddenResultOnly");
     const textToCopy = textField.innerText;
     navigator.clipboard.writeText(textToCopy);
+    showToastSuccess("The text has been copied to your clipboard")
 }
 
 function removeAllChildNodes(parent) {
@@ -148,6 +149,14 @@ function showToast(message) {
     toastBootstrap.show();
 }
 
+function showToastSuccess(message) {
+    const toastLiveExample = document.getElementById('liveToastSuccess');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    document.getElementById('liveToastSuccessBody').innerText = message;
+    toastBootstrap.show();
+}
+
+
 
 async function generateEmail() {
 
@@ -166,10 +175,10 @@ async function generateEmail() {
         return value === null || value === "";
     }
 
-    if (isEmpty(title)) {
-        showToast("Please provide a title.");
-        return;
-    }
+    //if (isEmpty(title)) {
+    //    showToast("Please provide a title.");
+    //    return;
+    //}
 
     if (isEmpty(name)) {
         showToast("Please provide a name.");
