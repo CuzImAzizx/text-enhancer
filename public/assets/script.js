@@ -169,6 +169,7 @@ async function generateEmail() {
     const urgency = document.getElementById("urgency").value;
     const length = document.getElementById("length").value;
     const model = document.getElementById("model").value;
+    const language = document.getElementById("language").value;
 
     // Helper function to check if a value is null or empty
     function isEmpty(value) {
@@ -207,6 +208,7 @@ async function generateEmail() {
     document.getElementById("tone").disabled = true;
     document.getElementById("urgency").disabled = true;
     document.getElementById("length").disabled = true;
+    document.getElementById("language").disabled = true;
     document.getElementById("resultWrapper").style.display = "none";
 
     document.getElementById("loadingText").style.display = "block";
@@ -230,6 +232,7 @@ async function generateEmail() {
                 "urgency": urgency,
                 "length": length,
                 "model": model,
+                "language": language
             })
         });
 
@@ -253,6 +256,7 @@ async function generateEmail() {
     document.getElementById("tone").disabled = false;
     document.getElementById("urgency").disabled = false;
     document.getElementById("length").disabled = false;
+    document.getElementById("language").disabled = false;
 
 
 }

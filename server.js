@@ -141,7 +141,7 @@ const emailLength = [
 ];
 
 app.post("/api/generateEmail", async (req, res) => {
-    const { emailHistory, title, name, relation, content, tone, urgency, length, model} = req.body
+    const { emailHistory, title, name, relation, content, tone, urgency, length, model, language} = req.body
     //TODO: Validate each thing
 
     let emailHistory2 = "";
@@ -163,6 +163,7 @@ The user want to say / write in the email: ${content}.
 ${emailTones[tone]}
 ${emailUrgency[urgency]}
 ${emailLength[length]}
+Write the email in ${language} language.
 `;
     const ollamaResponse = await fetch(`${ollamaURL}/api/generate`, {
         method: "POST",
