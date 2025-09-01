@@ -72,7 +72,8 @@ async function enhanceText() {
 
     } catch (e) {
         // punish user for error
-        document.writeln("The app crashed. You've done something wrong")
+        //document.writeln("The app crashed. You've done something wrong")
+        showToast(`Something went wrong\n${e}`)
     }
 
     document.getElementById("enhanceButton").disabled = false;
@@ -242,7 +243,7 @@ async function generateEmail() {
         document.getElementById("loadingText").style.display = "none"
         document.getElementById("emailResult").innerText = obj.result
     } catch (e) {
-
+        showToast(`Something went wrong\n${e}`)
     }
 
     document.getElementById("generateEmailButton").disabled = false;
