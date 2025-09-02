@@ -13,6 +13,10 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.listen(appPort);
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const ENHANCED_TEXTS_DB = "storage/enhanced_texts.json";
+const GENERATED_EMAILS_DB = "storage/generated_emails.json";
 
 
 let models = []
@@ -39,6 +43,7 @@ fetch(`${ollamaURL}/api/tags`)
     process.exit(1);
 })
 
+initializeDatabases()
 console.log(`The app is listening on http://127.0.0.1:${appPort}`)
 
 // ==== View Routes ====
@@ -101,6 +106,9 @@ app.post("/api/enhanceText", async (req, res) => {
     });
 
     const data = await ollamaResponse.json();
+
+    enhancedTextInsert(text, models[model], data.response)
+
     res.json({ result: data.response });
 })
 
@@ -176,6 +184,9 @@ Write the email in ${language} language.
     });
 
     const data = await ollamaResponse.json();
+
+    generatedEmailInsert(`${title} ${name}`, relation, content, tone, urgency, length, language, data.response);
+
     res.json({ result: data.response });
 
     
@@ -203,3 +214,100 @@ app.get("/secrets", (req, res) => {
 app.get("/api", (req, res) => {
     res.send(prankMessage)
 })
+
+// ==== Database Operations
+
+function enhancedTextsRead() {
+    try {
+        const data = fs.readFileSync(ENHANCED_TEXTS_DB, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error("Error reading database:", err);
+        return []; // Return an empty array to avoid app crash
+    }
+}
+
+function enhancedTextsSearch(index) {
+    const db = enhancedTextsRead();
+    return db.find(item => item.index === index) || null;
+}
+
+function enhancedTextInsert(input, model, enhancedText) {
+    const db = enhancedTextsRead();
+    const newEntry = {
+        index: uuidv4(),
+        datetime: new Date().toISOString(),
+        input: input,
+        model: model,
+        enhancedText: enhancedText
+    };
+    db.push(newEntry);
+    writeDB(ENHANCED_TEXTS_DB, db);
+    return newEntry;
+}
+
+function generatedEmailsRead() {
+    try {
+        const data = fs.readFileSync(GENERATED_EMAILS_DB, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error("Error reading generated emails database:", err);
+        return []; // Return an empty array to avoid app crash
+    }
+}
+
+function generatedEmailsSearch(index) {
+    const db = generatedEmailsRead();
+    return db.find(item => item.index === index) || null;
+}
+
+function generatedEmailInsert(name, relation, content, tone, urgency, length, language, generatedEmail) {
+    const db = generatedEmailsRead();
+    const newEntry = {
+        index: uuidv4(),
+        datetime: new Date().toISOString(),
+        name: name,
+        relation: relation,
+        content: content,
+        tone: tone,
+        urgency: urgency,
+        length: length,
+        language: language,
+        generatedEmail: generatedEmail
+    };
+    db.push(newEntry);
+    writeDB(GENERATED_EMAILS_DB, db);
+    return newEntry;
+}
+
+function generatedEmailDelete(index) {
+    let db = generatedEmailsRead();
+    db = db.filter(item => item.index !== index);
+    writeDB(GENERATED_EMAILS_DB, db);
+}
+
+function writeDB(database, data) {
+    try {
+        fs.writeFileSync(database, JSON.stringify(data, null, 2)); // Use `2` for pretty printing
+    } catch (err) {
+        console.error("Error writing to database:", err);
+    }
+}
+
+function initializeDatabases() {
+    const databases = [ENHANCED_TEXTS_DB, GENERATED_EMAILS_DB];
+
+    databases.forEach(dbPath => {
+        if (!fs.existsSync(dbPath)) {
+            try {
+                // Create the file with an empty array
+                fs.writeFileSync(dbPath, '[]', { flag: 'wx' });
+                console.log(`Database file created: ${dbPath}`);
+            } catch (err) {
+                console.error(`Error creating database file ${dbPath}:`, err);
+            }
+        } else {
+            console.log(`Database file exists: ${dbPath}`);
+        }
+    });
+}
