@@ -103,6 +103,18 @@ So please, don’t expose it publicly.
 
 - [ ] *TODO: Secure the app (Authentication, Validation, Rate limiting, etc.)*
 
+### 💀 List of known vulnerabilities:
+1. Denial of Service
+2. Prompt Injection
+3. Unvalidated Inputs
+4. Remote Code Execution via LLM
+5. Lack of Authentication/Authorization
+6. CSRF
+7. Direct API Access
+8. Frontend Variable Tampering
+9. Information Disclosure
+10. Ollama API Misconfiguration
+
 ## Why I made this
 
 - I wanted a **local** + **free alternative** to Grammarly and Quillbot.

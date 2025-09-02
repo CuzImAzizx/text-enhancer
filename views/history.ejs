@@ -1,0 +1,90 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <div class="card-header" style="text-align: center;">
+        <h2>Text Enhancement history</h2>
+      </div>
+      <% if(enhancedTexts.length == 0){ %>
+        <h5 class="mt-4 mb-4" style="text-align: center;">You have no records</h5>
+      <% } else { %>
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Input</th>
+            <th scope="col">Mode</th>
+            <th scope="col">Output</th>
+            <th scope="col">Date</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% enhancedTexts.forEach((enhancedText, i) => { %>
+          <tr>
+            <th scope="row"><%= i %></th>
+            <td><%= enhancedText.input %></td>
+            <td><%= enhancedText.mode %></td>
+            <td><%= enhancedText.enhancedText %></td>
+            <%
+        const date = new Date(enhancedText.datetime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      %>
+            <td><%= formattedDateTime %></td>
+            <td>
+              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal<%= i %>">
+                more
+              </button>
+            </td>
+          </tr>
+
+          <div class="modal fade" id="modal<%= i %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel"><%= enhancedText.index %></h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <%= i %>
+                </div>
+                <div class="modal-footer">
+                  <a href="/history/delete?index=<%= enhancedText.index %>"><button type="button" class="btn btn-danger">Delete</button></a>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <%  }); %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </div>
+</div>
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const deletionStatus = <%- JSON.stringify(deletionStatus) %>; // Access and parse it here
+    if(deletionStatus){
+        if(deletionStatus.deleted){
+            showToastSuccess(`Deleted "${deletionStatus.index} successfully"`)
+        } else {
+            showToast(`Error deleting "${deletionStatus.index}"\n${deletionStatus.reason}`)
+        }
+    }
+
+    });
+</script>
+<script src="/assets/script.js"></script>
+
+<%- include("partials/footer") %>
