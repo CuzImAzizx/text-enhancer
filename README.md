@@ -84,7 +84,7 @@ ollama pull gemma3:4b
 const appPort = 8404;
 const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not on the same host
 const allowedModels = [] // Set this array empty to allow all models
-// ==== End config
+// ==== End config ====
 ```
 
 5. Start the app
@@ -103,7 +103,7 @@ So please, don’t expose it publicly.
 
 - [ ] *TODO: Secure the app (Authentication, Validation, Rate limiting, etc.)*
 
-### 💀 List of known vulnerabilities:
+### 💀 List of potential vulnerabilities:
 1. Denial of Service
 2. Prompt Injection
 3. Unvalidated Inputs

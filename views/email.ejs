@@ -144,10 +144,10 @@
                 <div class="d-grid gap-2 mt-2">
 
 
-                  <div class="btn-group btn-group-lg" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-info btn-lg" id="generateEmailButton" onclick="generateEmail()">Generate Email ✨</button>
+                  <div class="btn-group btn-group-lg input-group" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-info btn-lg" id="generateEmailButton" onclick="generateEmail()" style="width: 70%;">Generate Email ✨</button>
 
-                    <select class="form-select" id="model" style="width: 15%;">
+                    <select class="form-select" id="model" >
                       <% for(let i = 0; i < models.length; i++){ %>
                       <option value="<%= i %>"><%= models[i] %></option>
                       <% } %>

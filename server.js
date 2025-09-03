@@ -81,6 +81,7 @@ app.get("/history", (req, res) => {
 app.get("/history/delete", (req, res) => {
 
     //res.send(req.query.index)
+    const type = req.query.type;
     const index = req.query.index;
 
     let deletionStatus = {
@@ -89,13 +90,24 @@ app.get("/history/delete", (req, res) => {
         reason: "",
     }
 
-    objToDelete = enhancedTextsSearch(index);
-    if(!objToDelete){
-        deletionStatus.deleted = false
-        deletionStatus.reason = `Record not found`
-    } else {
-        enhancedTextDelete(index);
-        deletionStatus.deleted = true;
+    if(type == "enhancement"){
+        objToDelete = enhancedTextsSearch(index);
+        if(!objToDelete){
+            deletionStatus.deleted = false
+            deletionStatus.reason = `Record not found`
+        } else {
+            enhancedTextDelete(index);
+            deletionStatus.deleted = true;
+        }
+    } else if(type == "email") {
+        objToDelete = generatedEmailsSearch(index);
+        if(!objToDelete){
+            deletionStatus.deleted = false
+            deletionStatus.reason = `Record not found`
+        } else {
+            generatedEmailDelete(index);
+            deletionStatus.deleted = true;
+        }
     }
 
 
