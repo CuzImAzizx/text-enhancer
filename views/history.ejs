@@ -8,7 +8,7 @@
         <h2>Text Enhancement history</h2>
       </div>
       <% if(enhancedTexts.length == 0){ %>
-        <h5 class="mt-4 mb-4" style="text-align: center;">You have no records</h5>
+      <h5 class="mt-4 mb-4" style="text-align: center;">You have no records</h5>
       <% } else { %>
       <table class="table table-dark table-striped">
         <thead>
@@ -95,13 +95,13 @@
     </div>
   </div>
   <hr>
-    <div class="card">
+  <div class="card">
     <div class="card-body">
       <div class="card-header" style="text-align: center;">
         <h2>Generated Emails history</h2>
       </div>
       <% if(generatedEmails.length == 0){ %>
-        <h5 class="mt-4 mb-4" style="text-align: center;">You have no records</h5>
+      <h5 class="mt-4 mb-4" style="text-align: center;">You have no records</h5>
       <% } else { %>
       <table class="table table-dark table-striped">
         <thead>
@@ -147,19 +147,19 @@
                 </div>
                 <div class="modal-body" style="text-align: center;">
                   <div class="mb-3 mt-3">
-<div class="container text-center">
-  <div class="row">
-    <div class="col">
-      <h5>Name</h5>
-      <p><%= generatedEmail.name %></p>
-    </div>
-    <div class="col">
-      <h5>Relation</h5>
-      <p><%= generatedEmail.relation %></p>
-    </div>
-  </div>
-  <hr>
-</div>
+                    <div class="container text-center">
+                      <div class="row">
+                        <div class="col">
+                          <h5>Name</h5>
+                          <p><%= generatedEmail.name %></p>
+                        </div>
+                        <div class="col">
+                          <h5>Relation</h5>
+                          <p><%= generatedEmail.relation %></p>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
                   </div>
                   <div class="mb-3 mt-3">
                     <h5>Content</h5>
@@ -168,26 +168,26 @@
 
                   </div>
                   <div class="mb-3 mt-3">
-<div class="container text-center">
-  <div class="row">
-    <div class="col">
-      <h5>Tone</h5>
-      <p><%= generatedEmail.tone %></p>
-    </div>
-    <div class="col">
-      <h5>Urgency</h5>
-      <p><%= generatedEmail.urgency %></p>
-    </div>
-    <div class="col">
-      <h5>Length</h5>
-      <p><%= generatedEmail.length %></p>
-    </div>
-    <div class="col">
-      <h5>Language</h5>
-      <p><%= generatedEmail.language %></p>
-    </div>
-  </div>
-</div>
+                    <div class="container text-center">
+                      <div class="row">
+                        <div class="col">
+                          <h5>Tone</h5>
+                          <p><%= generatedEmail.tone %></p>
+                        </div>
+                        <div class="col">
+                          <h5>Urgency</h5>
+                          <p><%= generatedEmail.urgency %></p>
+                        </div>
+                        <div class="col">
+                          <h5>Length</h5>
+                          <p><%= generatedEmail.length %></p>
+                        </div>
+                        <div class="col">
+                          <h5>Language</h5>
+                          <p><%= generatedEmail.language %></p>
+                        </div>
+                      </div>
+                    </div>
                     <hr>
                   </div>
                   <div class="mb-3 mt-3">
@@ -219,19 +219,18 @@
 
 </div>
 <script>
-
-    document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
 
     const deletionStatus = <%- JSON.stringify(deletionStatus) %>; // Access and parse it here
-    if(deletionStatus){
-        if(deletionStatus.deleted){
-            showToastSuccess(`Deleted "${deletionStatus.index} successfully"`)
-        } else {
-            showToast(`Error deleting "${deletionStatus.index}"\n${deletionStatus.reason}`)
-        }
+    if (deletionStatus) {
+      if (deletionStatus.deleted) {
+        showToastSuccess(`Deleted "${deletionStatus.index} successfully"`)
+      } else {
+        showToast(`Error deleting "${deletionStatus.index}"\n${deletionStatus.reason}`)
+      }
     }
 
-    });
+  });
 </script>
 <script src="/assets/script.js"></script>
 

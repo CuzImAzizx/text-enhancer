@@ -165,7 +165,8 @@ app.post("/api/enhanceText", async (req, res) => {
         body: JSON.stringify({
             model: models[model],
             prompt: prompt,
-            stream: false
+            stream: false,
+            think: false
         })
     });
 

@@ -29,7 +29,6 @@ async function enhanceText() {
             })
         });
         const obj = await response.json()
-        console.log(obj.result);
 
         document.getElementById("after").value = obj.result
 
@@ -40,6 +39,8 @@ async function enhanceText() {
             //document.getElementById("after").innerHTML = highlightedText2;
 
             let span = null;
+            let correctWords = 0;
+            let misspelledWords = 0;
 
             const diff = Diff.diffWords(text1, text2),
                 display = document.getElementById('after'),
@@ -52,11 +53,18 @@ async function enhanceText() {
                 span = document.createElement('span');
 
                 if (classes) {
+                    //Something changed from the original text
+                    misspelledWords++
+                    console.log("Wrong: ", part.value)
                     span.className = classes;
                     if(classes == "text-success")
                         span.style.fontWeight = "700";
                     if(classes == "text-danger")
                         span.style.textDecoration = "line-through";
+                } else {
+                    correctWords++;
+                    console.log("Correct: ", part.value)
+                    // Nothing changed from the original text
                 }
                 span.appendChild(document
                     .createTextNode(part.value));
@@ -65,6 +73,12 @@ async function enhanceText() {
 
             display.appendChild(fragment);
             document.getElementById("hiddenResultOnly").innerText = text2;
+            console.log("miss: ", misspelledWords);
+            console.log("corr: ", correctWords);
+            if(misspelledWords >= 4 && correctWords <= 1){
+                //document.writeln("shit")
+                lol(model);
+            }
         } else {
             document.getElementById("after").innerText = text2;
             document.getElementById("hiddenResultOnly").innerText = text2;
@@ -156,6 +170,14 @@ function showToastSuccess(message) {
     document.getElementById('liveToastSuccessBody').innerText = message;
     toastBootstrap.show();
 }
+
+function showToastInfo(message) {
+    const toastLiveExample = document.getElementById('liveToastInfo');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    document.getElementById('liveToastInfoBody').innerText = message;
+    toastBootstrap.show();
+}
+
 
 
 
