@@ -1,4 +1,4 @@
-# Text Enhancer 💎✨
+# Text Enhancer ✨
 
 A tool that uses Ollama's LLMs to enhance your text, and even generate emails.
 
@@ -83,8 +83,9 @@ ollama pull gemma3:4b
 // ==== Start config ====
 const appPort = 8404;
 const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not on the same host
-const allowedModels = [] // Set this array empty to allow all models
-// ==== End config ====
+const allowedModels = []; // Set this array empty to allow all models
+const keepAlive = -1; // -1 To keep the model up indefinitely, 0 to unload immediately, 5 to unload after 5 minutes.
+// ==== End config
 ```
 
 5. Start the app
@@ -109,7 +110,7 @@ So please, don’t expose it publicly.
 3. Unvalidated Inputs
 4. Remote Code Execution via LLM
 5. Lack of Authentication/Authorization
-6. CSRF
+6. ~~CSRF~~ _No authentication to begin with_
 7. Direct API Access
 8. Frontend Variable Tampering
 9. Information Disclosure

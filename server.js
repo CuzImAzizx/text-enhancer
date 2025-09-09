@@ -1,7 +1,8 @@
 // ==== Start config ====
-const appPort = 8404;
+const appPort = 8405;
 const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not on the same host
-const allowedModels = [] // Set this array empty to allow all models
+const allowedModels = []; // Set this array empty to allow all models
+const keepAlive = -1; // -1 To keep the model up indefinitely, 0 to unload immediately, 5 to unload after 5 minutes.
 // ==== End config
 
 // ==== Starting procedures ====
@@ -166,6 +167,7 @@ app.post("/api/enhanceText", async (req, res) => {
             model: models[model],
             prompt: prompt,
             stream: false,
+            keep_alive: keepAlive,
             think: false
         })
     });
