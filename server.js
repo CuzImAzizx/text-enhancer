@@ -168,7 +168,10 @@ app.post("/api/enhanceText", async (req, res) => {
             prompt: prompt,
             stream: false,
             keep_alive: keepAlive,
-            think: false
+            think: false,
+            options: {
+                temperature: 0.3
+            }
         })
     });
 
@@ -262,6 +265,7 @@ Write the email in ${language} language.
         body: JSON.stringify({
             model: models[model],
             prompt: fullPrompt,
+            keep_alive: keepAlive,
             stream: false
         })
     });

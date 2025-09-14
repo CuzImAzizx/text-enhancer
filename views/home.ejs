@@ -65,7 +65,9 @@
               </p>
               <label for="after">Your enhanced version will appear here</label>
             </div>
-            <input type="text" id="hiddenResultOnly" style="display: none;"></span>
+            <input type="text" id="hiddenResultOnly" style="display: none;"> <!-- Result without adding shit, to copy into clipboard -->
+            <input type="text" id="hiddenAdded" style="display: none;"> <!-- Result showing only added words. When not checked -->
+            <input type="text" id="hiddenAddedRemoved" style="display: none;"> <!-- Result showing added and removed shit. When checked -->
 
             <div class="form-floating" id="loadingText" style="display: none;">
               <p class="form-control mb-3" id="after" style="min-height: 200px; text-align: left;">
@@ -83,6 +85,14 @@
             <div class="container text-center mt-3" id="resultOptions" style="display: none;">
               <div class="row">
                 <div class="col">
+<div class="form-check form-switch" style="width: 50%; margin-left: 25%;">
+  <input class="form-check-input" type="checkbox" role="switch" id="showDiff">
+  <label class="form-check-label" for="showDiff" id="showDiffLabel" style="opacity: 50%;">Show Difference</label>
+</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
                   <!--
                   <div class="centralize">
                     <div>
@@ -96,7 +106,7 @@
                     </div>
                   </div>
                   -->
-                  <button class="btn btn-secondary" style="width: 95%;" onclick="copyText()"><i class="fa-solid fa-copy"></i> Copy Text</button>
+                  <button class="btn btn-secondary btn-lg mt-3" style="width: 95%;" onclick="copyText()"><i class="fa-solid fa-copy"></i> Copy Text</button>
                 </div>
               </div>
             </div>

@@ -13,6 +13,7 @@ async function enhanceText() {
     document.getElementById("loadingText").style.display = "block"
     document.getElementById("textArea").style.display = "none"
     document.getElementById("enhanceButton").disabled = true;
+    document.getElementById("showDiff").disabled = true;
     removeAllChildNodes(document.getElementById("after"))
     document.getElementById("hiddenResultOnly").innerText = "";
 
@@ -35,6 +36,7 @@ async function enhanceText() {
         const text1 = text
         const text2 = obj.result;
         if (mode == 0) {
+            document.getElementById("showDiff").disabled = false
             //const [highlightedText1, highlightedText2] = compareAndHighlight(text1, text2);
             //document.getElementById("after").innerHTML = highlightedText2;
 
@@ -45,6 +47,11 @@ async function enhanceText() {
             const diff = Diff.diffWords(text1, text2),
                 display = document.getElementById('after'),
                 fragment = document.createDocumentFragment();
+            const onlyAdded = document.getElementById('hiddenAdded')
+            onlyAdded.innerHTML = "";
+            const addedRemoved = document.getElementById('hiddenAddedRemoved')
+            addedRemoved.innerHTML = "";
+            const fragmentOnlyAdded = document.createDocumentFragment()
 
             diff.forEach((part) => {
                 const classes = part.added ? 'text-success' :
@@ -55,7 +62,6 @@ async function enhanceText() {
                 if (classes) {
                     //Something changed from the original text
                     misspelledWords++
-                    console.log("Wrong: ", part.value)
                     span.className = classes;
                     if(classes == "text-success")
                         span.style.fontWeight = "700";
@@ -63,20 +69,28 @@ async function enhanceText() {
                         span.style.textDecoration = "line-through";
                 } else {
                     correctWords++;
-                    console.log("Correct: ", part.value)
                     // Nothing changed from the original text
                 }
                 span.appendChild(document
                     .createTextNode(part.value));
                 fragment.appendChild(span);
+                if(classes == "text-success" || classes == ""){ // '' and 'text-success'
+                    let newSpan = document.createElement('span');
+                    //newSpan.cloneNode(span); // This doesn't work
+                    newSpan.style.fontWeight = span.style.fontWeight;
+                    if(span.className)
+                        newSpan.className = span.className;
+                    newSpan.innerText = part.value;
+                    fragmentOnlyAdded.appendChild(newSpan);
+                } 
             });
 
-            display.appendChild(fragment);
+            addedRemoved.appendChild(fragment);
             document.getElementById("hiddenResultOnly").innerText = text2;
-            console.log("miss: ", misspelledWords);
-            console.log("corr: ", correctWords);
+            onlyAdded.appendChild(fragmentOnlyAdded)
+            updateUIShowDiff();
+
             if(misspelledWords >= 4 && correctWords <= 1){
-                //document.writeln("shit")
                 lol(model);
             }
         } else {
@@ -96,6 +110,35 @@ async function enhanceText() {
     document.getElementById("resultOptions").style.display = "block"
 
 
+}
+
+function updateUIShowDiff() {
+  const display = document.getElementById('after');
+  display.innerHTML = "";
+  const checker = document.getElementById('showDiff');
+
+  if (checker.checked) {
+    document.getElementById('showDiffLabel').style.opacity = "100%";
+    const hiddenAddedRemoved = document.getElementById('hiddenAddedRemoved');
+    if (hiddenAddedRemoved) {
+      // Clone each child node and append it to the display
+      Array.from(hiddenAddedRemoved.childNodes).forEach(node => {
+        display.appendChild(node.cloneNode(true)); // Deep clone!
+      });
+    }
+  } else {
+    document.getElementById('showDiffLabel').style.opacity = "50%";
+    const hiddenAdded = document.getElementById('hiddenAdded');
+    if (hiddenAdded) {
+      // Clear existing content in 'display' before adding new content
+      display.innerHTML = '';
+
+      // Clone each child node and append it to the display
+      Array.from(hiddenAdded.childNodes).forEach(node => {
+        display.appendChild(node.cloneNode(true)); // Deep clone!
+      });
+    }
+  }
 }
 
 function enableThingsEnhanceText(){
@@ -129,6 +172,9 @@ function removeAllChildNodes(parent) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Your existing code for button listeners etc. can go here.
+    const showDiff = document.getElementById('showDiff');
+    showDiff.addEventListener('change', updateUIShowDiff);
+
 
     // Get references to the radio buttons and the new wrapper div
     const newEmailRadio = document.getElementById('newEmail');
