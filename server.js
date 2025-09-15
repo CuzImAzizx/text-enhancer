@@ -13,12 +13,18 @@ const bodyParser = require ("body-parser");
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.set('trust proxy', true); // Might be useful later. Check CF-Connecting-IP
 app.listen(appPort);
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const ENHANCED_TEXTS_DB = "storage/enhanced_texts.json";
 const GENERATED_EMAILS_DB = "storage/generated_emails.json";
+const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, printf } = format;
 
+const logger = initializeLogger();
+initializeDatabases()
 
 let models = []
 
@@ -37,15 +43,23 @@ fetch(`${ollamaURL}/api/tags`)
                 models.push(ollamaModel.model);
             }
         });
-        console.log(`Got ${models.length} models from Ollama`);
+        logger.info(`Got ${models.length} models from Ollama`)
     })    
 }).catch(e => {
-    console.log("Couldn't connect to Ollama Server");
+    logger.error(`Couldn't connect to Ollama Server ${e}`)
     process.exit(1);
 })
 
-initializeDatabases()
-console.log(`The app is listening on http://127.0.0.1:${appPort}`)
+logger.info(`The app is listening on http://127.0.0.1:${appPort}`)
+
+// ==== Middlewares
+
+app.use((req, res, next) => {
+  logger.info(`${req.ip} ${req.method} ${req.originalUrl}`)
+  next(); // Pass control to the next middleware or route handler
+});
+
+
 
 // ==== View Routes ====
 
@@ -397,12 +411,39 @@ function initializeDatabases() {
             try {
                 // Create the file with an empty array
                 fs.writeFileSync(dbPath, '[]', { flag: 'wx' });
-                console.log(`Database file created: ${dbPath}`);
+                //console.log(`Database file created: ${dbPath}`);
+                logger.info(`Database file created: ${dbPath}`)
             } catch (err) {
-                console.error(`Error creating database file ${dbPath}:`, err);
+                //console.error(`Error creating database file ${dbPath}:`, err);
+                logger.error(`Error creating database file ${dbPath}:`, err)
             }
         } else {
-            console.log(`Database file exists: ${dbPath}`);
+            //console.log(`Database file exists: ${dbPath}`);
+            logger.info(`Database file exists: ${dbPath}`)
         }
     });
+}
+
+function initializeLogger() {
+    const myFormat = printf(({ level, message, timestamp }) => {
+        return `${timestamp} ${level.toUpperCase()}: ${message}`;
+    });
+
+    const logger = winston.createLogger({
+        level: 'info',
+        //format: winston.format.json(),
+        format: combine(
+            timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Add timestamp with a custom format
+            myFormat // Apply your custom output format
+        ),
+
+        transports: [
+            new winston.transports.Console(),
+            new winston.transports.File({ filename: 'storage/logs.log' })
+        ]
+    });
+    
+
+    logger.info("The app has started")
+    return logger;
 }
