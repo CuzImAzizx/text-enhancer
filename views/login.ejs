@@ -1,0 +1,27 @@
+<%- include("partials/header") %>
+<%- include("partials/navbar") %>
+
+<div class="container mt-5" style="width: 65%; text-align: center;">
+    <div class="card">
+      <div class="card-header">
+        <h1>Login form</h1>
+      </div>
+    <div class="card-body">
+<form action="/login" method="POST">
+  <div class="mb-3">
+    <label for="email" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="email" name="email" required>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control" id="password" name="password" required>
+  </div>
+    <button type="submit" class="btn btn-primary" style="width: 95%;">Submit</button>
+    <p class="mt-2">Don't have an account? <a href="/register">Create a new account</a></p>
+</form>
+
+    </div>
+</div>
+
+</div>
+<%- include("partials/footer") %>

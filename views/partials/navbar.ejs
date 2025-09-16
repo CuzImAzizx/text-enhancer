@@ -51,4 +51,15 @@
       </div>
     </div>
 
+    <% if (typeof errors !== 'undefined') { %>
+      <script>
+        function showErrors(){
+          let message = "Error: \n"
+          showToast(message)
+
+        }
+        showErrors()
+      </script>
+    <% } %>
+
   </div>

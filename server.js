@@ -13,15 +13,20 @@ const bodyParser = require ("body-parser");
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json());
+const { body, validationResult } = require('express-validator');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('trust proxy', true); // Might be useful later. Check CF-Connecting-IP
 app.listen(appPort);
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const ENHANCED_TEXTS_DB = "storage/enhanced_texts.json";
-const GENERATED_EMAILS_DB = "storage/generated_emails.json";
+const crypto = require('crypto');
 const winston = require('winston');
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, printf } = format;
+const ENHANCED_TEXTS_DB = "./storage/enhanced_texts.json";
+const GENERATED_EMAILS_DB = "./storage/generated_emails.json";
+const USERS_DB = "./storage/users.json";
 
 const logger = initializeLogger();
 initializeDatabases()
@@ -69,6 +74,41 @@ app.get("/", (req, res) => {
     })
 })
 
+app.get("/login", (req, res) => {
+    // Check if not logged in
+    res.render("login.ejs")
+})
+
+app.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = generateSHA256Hash(req.body.password);
+    const users = readDB(USERS_DB); // Returns an array of users
+    const user = users.find(u => u.email === email);
+    if(!user){
+        res.send("no user with this email")
+    }
+    const isCredentialsCorrect = user.password === password;
+    if(!isCredentialsCorrect){
+        res.send("password false")
+    }
+    res.send("YAY")
+})
+
+
+app.get("/register", (req, res) => {
+    // Check if not logged in
+    res.render("register.ejs")
+})
+
+app.post("/register", (req, res) => {
+    // TODO: Validate inputs
+    const email = req.body.email;
+    // Make sure this email is not used by someone else
+    const password = generateSHA256Hash(req.body.password);
+    userInsert(email, password)
+    res.redirect("/")
+})
+
 
 app.get("/about", (req, res) => {
     res.send("TODO: Implement about page")
@@ -81,8 +121,8 @@ app.get("/email", (req, res) => {
 })
 app.get("/history", (req, res) => {
 
-    const enhancedTexts = enhancedTextsRead();
-    const generatedEmails = generatedEmailsRead();
+    const enhancedTexts = readDB(ENHANCED_TEXTS_DB);
+    const generatedEmails = readDB(GENERATED_EMAILS_DB);
     deletionStatus = null;
 
     res.render("history.ejs", {
@@ -318,23 +358,27 @@ app.get("/api", (req, res) => {
 
 // ==== Database Operations
 
-function enhancedTextsRead() {
-    try {
-        const data = fs.readFileSync(ENHANCED_TEXTS_DB, 'utf8');
-        return JSON.parse(data);
-    } catch (err) {
-        console.error("Error reading database:", err);
-        return []; // Return an empty array to avoid app crash
-    }
+function userInsert(email, password) {
+    const db = readDB(USERS_DB);
+    const newEntry = {
+        index: uuidv4(),
+        datetime: new Date().toISOString(),
+        email: email,
+        password: password
+    };
+    db.push(newEntry);
+    writeDB(USERS_DB, db);
+    return newEntry;
 }
 
+
 function enhancedTextsSearch(index) {
-    const db = enhancedTextsRead();
+    const db = readDB(ENHANCED_TEXTS_DB);
     return db.find(item => item.index === index) || null;
 }
 
 function enhancedTextInsert(input, mode, model, enhancedText) {
-    const db = enhancedTextsRead();
+    const db = readDB(ENHANCED_TEXTS_DB);
     const newEntry = {
         index: uuidv4(),
         datetime: new Date().toISOString(),
@@ -349,29 +393,18 @@ function enhancedTextInsert(input, mode, model, enhancedText) {
 }
 
 function enhancedTextDelete(index) {
-    let db = enhancedTextsRead();
+    let db = readDB(ENHANCED_TEXTS_DB);
     db = db.filter(item => item.index !== index);
     writeDB(ENHANCED_TEXTS_DB, db);
 }
 
-
-function generatedEmailsRead() {
-    try {
-        const data = fs.readFileSync(GENERATED_EMAILS_DB, 'utf8');
-        return JSON.parse(data);
-    } catch (err) {
-        console.error("Error reading generated emails database:", err);
-        return []; // Return an empty array to avoid app crash
-    }
-}
-
 function generatedEmailsSearch(index) {
-    const db = generatedEmailsRead();
+    const db = readDB(GENERATED_EMAILS_DB);
     return db.find(item => item.index === index) || null;
 }
 
 function generatedEmailInsert(name, relation, content, tone, urgency, length, language, generatedEmail) {
-    const db = generatedEmailsRead();
+    const db = readDB(GENERATED_EMAILS_DB);
     const newEntry = {
         index: uuidv4(),
         datetime: new Date().toISOString(),
@@ -390,10 +423,21 @@ function generatedEmailInsert(name, relation, content, tone, urgency, length, la
 }
 
 function generatedEmailDelete(index) {
-    let db = generatedEmailsRead();
+    let db = readDB(GENERATED_EMAILS_DB);
     db = db.filter(item => item.index !== index);
     writeDB(GENERATED_EMAILS_DB, db);
 }
+
+function readDB(database) {
+    try {
+        const data = fs.readFileSync(database, 'utf8');
+        return JSON.parse(data);
+    } catch (err) {
+        console.error(`Error reading database ${database}:\n`, err);
+        return []; // Return an empty array to avoid app crash
+    }
+}
+
 
 function writeDB(database, data) {
     try {
@@ -404,7 +448,7 @@ function writeDB(database, data) {
 }
 
 function initializeDatabases() {
-    const databases = [ENHANCED_TEXTS_DB, GENERATED_EMAILS_DB];
+    const databases = [ENHANCED_TEXTS_DB, GENERATED_EMAILS_DB, USERS_DB];
 
     databases.forEach(dbPath => {
         if (!fs.existsSync(dbPath)) {
@@ -446,4 +490,17 @@ function initializeLogger() {
 
     logger.info("The app has started")
     return logger;
+}
+
+// ==== Helper functions? ====
+
+function generateSHA256Hash(input) {
+  // Create a hash object with the 'sha256' algorithm
+  const hash = crypto.createHash('sha256');
+
+  // Update the hash object with the input data
+  hash.update(input);
+
+  // Digest the hash and return it in hexadecimal format
+  return hash.digest('hex');
 }
