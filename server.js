@@ -1,9 +1,13 @@
-// ==== Start config ====
-const appPort = 8405;
-const ollamaURL = "http://127.0.0.1:11434"; // Avoid using http when Ollama is not on the same host
-const allowedModels = []; // Set this array empty to allow all models
-const keepAlive = -1; // -1 To keep the model up indefinitely, 0 to unload immediately, 5 to unload after 5 minutes.
-// ==== End config
+require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+const logger = initializeLogger();
+
+ininitializeDotEnv();
+const appPort = process.env.APP_PORT;
+const ollamaURL = process.env.OLLAMA_URL;
+const allowedModels = process.env.ALLOWED_MODELS ? process.env.ALLOWED_MODELS.split(',') : [];
+const keepAlive = Number(process.env.KEEP_ALIVE);
 
 // ==== Starting procedures ====
 
@@ -15,15 +19,10 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.set('trust proxy', true); // Might be useful later. Check CF-Connecting-IP
 app.listen(appPort);
-const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const ENHANCED_TEXTS_DB = "storage/enhanced_texts.json";
 const GENERATED_EMAILS_DB = "storage/generated_emails.json";
-const winston = require('winston');
-const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, printf } = format;
 
-const logger = initializeLogger();
 initializeDatabases()
 
 let models = []
@@ -425,6 +424,10 @@ function initializeDatabases() {
 }
 
 function initializeLogger() {
+    const winston = require('winston');
+    const { createLogger, format, transports } = require('winston');
+    const { combine, timestamp, printf } = format;
+
     const myFormat = printf(({ level, message, timestamp }) => {
         return `${timestamp} ${level.toUpperCase()}: ${message}`;
     });
@@ -446,4 +449,55 @@ function initializeLogger() {
 
     logger.info("The app has started")
     return logger;
+}
+
+function ininitializeDotEnv() {
+    //This whole function is AI Generated.
+  const envPath = path.resolve(__dirname, '.env');
+  const exampleEnvPath = path.resolve(__dirname, '.env.example');
+
+  // Check if .env exists
+  if (!fs.existsSync(envPath)) {
+    logger.info('.env not found. Copying .env.example to .env...');
+    if (!fs.existsSync(exampleEnvPath)) {
+      logger.error('Error: .env.example file missing. Cannot create .env file.');
+      process.exit(1);
+    }
+    fs.copyFileSync(exampleEnvPath, envPath);
+    logger.info('.env created successfully.');
+  } else {
+    logger.info('.env file found. Validating...');
+
+    // Define validations for your env vars
+    const { APP_PORT, OLLAMA_URL, ALLOWED_MODELS, KEEP_ALIVE } = process.env;
+
+    let errorMessages = [];
+
+    // Validate APP_PORT - should be integer between 1-65535
+    const portNum = Number(APP_PORT);
+    if (!APP_PORT || isNaN(portNum) || portNum < 1 || portNum > 65535) {
+      errorMessages.push('APP_PORT must be an integer between 1 and 65535.');
+    }
+
+    // Validate OLLAMA_URL - basic check for http or https protocol
+    if (!OLLAMA_URL || !/^https?:\/\/.+/.test(OLLAMA_URL)) {
+      errorMessages.push('OLLAMA_URL must be a valid URL starting with http:// or https://');
+    }
+
+    // ALLOWED_MODELS - can be empty or comma-separated strings, no strict validation needed here
+
+    // KEEP_ALIVE - must be integer (could be negative)
+    if (!KEEP_ALIVE || isNaN(Number(KEEP_ALIVE)) || !Number.isInteger(Number(KEEP_ALIVE))) {
+      errorMessages.push('KEEP_ALIVE must be an integer (e.g., -1, 0, 5).');
+    }
+
+    // If any errors, log and exit
+    if (errorMessages.length > 0) {
+      logger.error('Environment variable validation failed:');
+      errorMessages.forEach(msg => logger.error(`- ${msg}`));
+      process.exit(1);
+    }
+
+    logger.info('All environment variables are valid');
+  }
 }
